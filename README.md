@@ -9,6 +9,7 @@ Repo ini juga memiliki versi web yang berjalan sepenuhnya di browser menggunakan
 - **Coba online:** https://merjohnpagente.github.io/Hand-track/
 - **Jalankan lokal:** dari root repo jalankan `python3 -m http.server 8000`, lalu buka `http://localhost:8000/web/` (butuh internet untuk memuat MediaPipe dari CDN).
 - **Deploy:** setiap push ke branch `main` otomatis di-build dan dipublikasikan oleh GitHub Actions (lihat `.github/workflows/deploy-pages.yml`). Aktifkan sekali di **Settings → Pages → Source: GitHub Actions** jika belum aktif.
+- **Deploy ke Vercel:** import repo ini di https://vercel.com/new. Vercel otomatis memakai `vercel.json` (build command `bash scripts/build-site.sh`, output `dist/`), jadi cukup klik **Deploy**. Setiap push ke `main` juga akan redeploy otomatis.
 
 Semua pemrosesan video terjadi di perangkat pengguna; tidak ada frame yang dikirim ke server.
 
