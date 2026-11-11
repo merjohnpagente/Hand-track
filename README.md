@@ -2,6 +2,16 @@
 
 Aplikasi filter kamera interaktif menggunakan gesture tangan (hand tracking) dengan MediaPipe dan OpenCV. Anda dapat membuat "portal" dengan jari Anda yang akan menerapkan berbagai filter menarik (Mono, Dual-Tone, Pixelate, Invert, Sepia, Blur, Thermal, Sketch, Glitch, Neon, Galaxy).
 
+## Versi Web (GitHub Pages)
+
+Repo ini juga memiliki versi web yang berjalan sepenuhnya di browser menggunakan MediaPipe Tasks Vision (WebAssembly). Tidak perlu install Python atau library apa pun.
+
+- **Coba online:** https://merjohnpagente.github.io/Hand-track/
+- **Jalankan lokal:** dari root repo jalankan `python3 -m http.server 8000`, lalu buka `http://localhost:8000/web/` (butuh internet untuk memuat MediaPipe dari CDN).
+- **Deploy:** setiap push ke branch `main` otomatis di-build dan dipublikasikan oleh GitHub Actions (lihat `.github/workflows/deploy-pages.yml`). Aktifkan sekali di **Settings → Pages → Source: GitHub Actions** jika belum aktif.
+
+Semua pemrosesan video terjadi di perangkat pengguna; tidak ada frame yang dikirim ke server.
+
 ## Persyaratan Sistem
 - Python 3.7 atau lebih baru
 - Webcam
