@@ -71,7 +71,7 @@ async function start() {
   startBtn.disabled = true;
   try {
     if (!window.isSecureContext) {
-      throw new Error("Kamera butuh HTTPS atau localhost.");
+      throw new Error("Camera requires HTTPS or localhost.");
     }
     if (!handLandmarker) {
       await initModels();
@@ -88,13 +88,13 @@ async function start() {
     requestAnimationFrame(loop);
   } catch (err) {
     console.error(err);
-    setStatus(`Gagal: ${err.message || err}`, true);
+    setStatus(`Failed: ${err.message || err}`, true);
     startBtn.disabled = false;
   }
 }
 
 async function initModels() {
-  setStatus("Memuat MediaPipe (WASM)…");
+  setStatus("Loading MediaPipe (WASM)…");
   const vision = await FilesetResolver.forVisionTasks(MP_WASM);
 
   const [handModel, segModel] = await Promise.all([
@@ -102,7 +102,7 @@ async function initModels() {
     resolveModel("selfie_segmenter.tflite"),
   ]);
 
-  setStatus("Memuat model hand tracking…");
+  setStatus("Loading hand tracking model…");
   handLandmarker = await createWithFallback((delegate) =>
     HandLandmarker.createFromOptions(vision, {
       baseOptions: { modelAssetPath: handModel, delegate },
@@ -114,7 +114,7 @@ async function initModels() {
     }),
   );
 
-  setStatus("Memuat model segmentasi (GALAXY)…");
+  setStatus("Loading segmentation model (GALAXY)…");
   try {
     segmenter = await createWithFallback((delegate) =>
       ImageSegmenter.createFromOptions(vision, {
@@ -126,7 +126,7 @@ async function initModels() {
     );
   } catch (err) {
     // Galaxy filter just falls back to "no effect" when this model fails.
-    console.warn("Segmenter tidak tersedia:", err);
+    console.warn("Segmenter unavailable:", err);
     segmenter = null;
   }
 }
@@ -135,7 +135,7 @@ async function createWithFallback(create) {
   try {
     return await create("GPU");
   } catch (err) {
-    console.warn("Delegate GPU gagal, memakai CPU.", err);
+    console.warn("GPU delegate failed, falling back to CPU.", err);
     return create("CPU");
   }
 }
@@ -160,10 +160,10 @@ async function resolveModel(name) {
 
 async function startCamera() {
   if (!navigator.mediaDevices?.getUserMedia) {
-    throw new Error("Browser ini tidak mendukung akses kamera.");
+    throw new Error("This browser does not support camera access.");
   }
 
-  setStatus("Meminta izin kamera…");
+  setStatus("Requesting camera permission…");
   cameraStream = await navigator.mediaDevices.getUserMedia({
     audio: false,
     video: {
@@ -204,7 +204,7 @@ function loop() {
     try {
       render(performance.now());
     } catch (err) {
-      console.warn("Frame dilewati:", err);
+      console.warn("Skipped frame:", err);
     }
   }
 
@@ -226,7 +226,7 @@ function render(timestamp) {
   try {
     result = handLandmarker.detectForVideo(video, timestamp);
   } catch (err) {
-    console.warn("Deteksi tangan gagal:", err);
+    console.warn("Hand detection failed:", err);
     return;
   }
 
@@ -247,7 +247,7 @@ function render(timestamp) {
       }
       seg.close?.();
     } catch (err) {
-      console.warn("Segmentasi gagal:", err);
+      console.warn("Segmentation failed:", err);
     }
   }
 
